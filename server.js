@@ -1,3 +1,3 @@
-//the server file that will be running backl end logistics
+//the server file that will be running backend logistics
 
-awdwad
+//there needs to be a table for all transactions that have happened
