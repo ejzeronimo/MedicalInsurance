@@ -1,0 +1,22 @@
+{
+  "name": "medicalinsurance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "frontend.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Riggyz505/MedicalInsurance.git"
+  },
+  "author": "Ethan Zeronik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Riggyz505/MedicalInsurance/issues"
+  },
+  "homepage": "https://github.com/Riggyz505/MedicalInsurance#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
