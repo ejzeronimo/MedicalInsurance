@@ -2,19 +2,20 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Medical Insurance Database</title>
+    <title>Insurance Company Worker</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script type="text/javascript" src="/js/adminDbGenerator.js"></script>
+    <script type="text/javascript" src="/js/insurancePage.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body onload="requestDatabaseInformationReadOnly()">
+    <div id="topbar">
+        
+        <button type="button" id="insuranceRefreshButton">Caluclate and Pay Outstanding Balances</button>
+    </div>
     <div id="content">
-        <div id="HospitalTable"></div>
-        <div id="TreatmentTable"></div>
-        <div id="InsuranceTable"></div>
         <div id="InsurancePlanTable"></div>
         <div id="UserTable"></div>
         <div id="InvoiceTable"></div>

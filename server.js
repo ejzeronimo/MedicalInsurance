@@ -40,7 +40,7 @@ app.listen(3000, function () {
     console.log('listening for website requests on port: 3000');
 });
 
-app.get('/', function (req, res) {
+app.get('/?retry=false', function (req, res) {
     res.sendFile(__dirname + "/public/index.html");
 });
 
@@ -48,15 +48,59 @@ app.get('/database', function (req, res) {
     res.sendFile(__dirname + "/public/database.html");
 });
 
-app.get('/user_database', function (req, res) {
+app.get('/insurance', function (req, res) {
+    res.sendFile(__dirname + "/public/insurance.html");
+});
+
+app.get('/patient', function (req, res) {
+    res.sendFile(__dirname + "/public/patient.html");
+});
+
+app.get('/sql_database', function (req, res) {
     var database = {};
-    requestUsers = new tedious.Request("SELECT * FROM Users;", function (err, rowCount, rows) {
+    requestInsuranceFirms = new tedious.Request("SELECT * FROM InsuranceFirms ORDER BY FirmName;", function (err, rowCount, rows) {
+        if (err) {
+            console.log(err);
+        }
+        database.InsuranceTable = rows;
+        res.send(database);
+    });
+    requestInvoices= new tedious.Request("SELECT * FROM Invoices ORDER BY IsPaidByPatient;", function (err, rowCount, rows) {
+        if (err) {
+            console.log(err);
+        }
+        database.InvoiceTable = rows;
+        connection.execSql(requestInsuranceFirms); 
+    });
+    requestPlans= new tedious.Request("SELECT * FROM InsurancePlans ORDER BY CoverageRate;", function (err, rowCount, rows) {
+        if (err) {
+            console.log(err);
+        }
+        database.InsurancePlanTable = rows;
+        connection.execSql(requestInvoices); 
+    });
+    requestTreatements = new tedious.Request("SELECT * FROM Treatments ORDER BY StandardPrice;", function (err, rowCount, rows) {
+        if (err) {
+            console.log(err);
+        }
+        database.TreatmentTable = rows;
+        connection.execSql(requestPlans); 
+    });
+    requestHospitals = new tedious.Request("SELECT * FROM Hospitals ORDER BY HospitalName;", function (err, rowCount, rows) {
+        if (err) {
+            console.log(err);
+        }
+        database.HospitalTable = rows;
+        connection.execSql(requestTreatements); 
+    });
+    requestUsers = new tedious.Request("SELECT * FROM Users ORDER BY AccessLevel;", function (err, rowCount, rows) {
         if (err) {
             console.log(err);
         }
         database.UserTable = rows;
-        res.send(database);
+        connection.execSql(requestHospitals); 
     });
+    
     connection.execSql(requestUsers);
 });
 
@@ -78,14 +122,16 @@ app.post('/submit_login', function (req, res) {
                     res.redirect("/database");
                     break;
                 case 2:
+                    res.redirect("/insurance");
                     break;
                 case 3:
                     break;
                 case 4:
+                    res.redirect("/patient");
                     break;
             }
         } else {
-            res.redirect("/");
+            res.redirect("/?retry=true");
         }
     });
     connection.execSql(request);
