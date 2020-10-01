@@ -1,3 +1,30 @@
-body {
-    background-color: coral;
+body 
+{
+    background-image: linear-gradient(navy, lightblue);
+    color: white;
+    
+}
+
+#loginPanel
+{
+  font-family: 'Open Sans', sans-serif;
+  border-style: solid;
+  border-width: 5px;
+  border-color: darkgray;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: gray;
+  width: 400px;
+  height: 200px;
+  text-align: center;
+}
+
+#loginText
+{
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 30px;
 }

@@ -2,7 +2,7 @@
   "name": "medicalinsurance",
   "version": "1.0.0",
   "description": "",
-  "main": "frontend.js",
+  "main": "server.js",
   "scripts": {
     "test": "node ."
   },
@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Riggyz505/MedicalInsurance#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "tedious": "^9.2.1"
   }
 }
