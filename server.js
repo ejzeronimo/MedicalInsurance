@@ -9,8 +9,8 @@ var config = {
     authentication: {
         type: 'default',
         options: {
-            userName: 'yeet',
-            password: ''
+            userName: 'sa',
+            password: 'PurdueM3dic@l'
         }
     },
     options: {
@@ -48,14 +48,25 @@ app.get('/database', function (req, res) {
     res.sendFile(__dirname + "/public/database.html");
 });
 
+app.get('/user_database', function (req, res) {
+    var database = {};
+    requestUsers = new tedious.Request("SELECT * FROM Users;", function (err, rowCount, rows) {
+        if (err) {
+            console.log(err);
+        }
+        database.UserTable = rows;
+        res.send(database);
+    });
+    connection.execSql(requestUsers);
+});
+
 app.post('/submit_login', function (req, res) {
     //log onto the sql db
     var id = req.body.id;
     var passkey = req.body.passkey;
     //log the data shown
-    console.log(req.body + "requested login");
+    console.log(JSON.stringify(req.body) + " requested login");
     //check to see if the user is legit
-    //request = new tedious.Request("SELECT AccessLevel FROM Users WHERE (UserName = '" + id + "') AND (Passkey = '" + passkey + "');", function (err) {
     request = new tedious.Request("SELECT AccessLevel FROM Users WHERE (UserName = '" + id + "') AND (Passkey = '" + passkey + "');", function (err, rowCount, rows) {
         if (err) {
             console.log(err);
@@ -76,7 +87,6 @@ app.post('/submit_login', function (req, res) {
         } else {
             res.redirect("/");
         }
-
     });
     connection.execSql(request);
 });

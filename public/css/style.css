@@ -1,12 +1,10 @@
-body 
-{
-    background-image: linear-gradient(navy, lightblue);
-    color: white;
-    
+body {
+  background-image: linear-gradient(navy, lightblue);
+  color: white;
+
 }
 
-#loginPanel
-{
+#loginPanel {
   font-family: 'Open Sans', sans-serif;
   border-style: solid;
   border-width: 5px;
@@ -22,9 +20,33 @@ body
   text-align: center;
 }
 
-#loginText
-{
+#loginText {
   text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 30px;
+}
+
+#content {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#UserTable {
+  font-family: 'Open Sans', sans-serif;
+}
+
+table,
+th,
+td {
+  padding: 5px;
+  background-color: gray;
+  text-align: center;
+  border: 5px solid darkgray;
+  border-collapse: collapse;
+}
+
+th {
   font-family: 'Roboto', sans-serif;
   font-size: 30px;
 }

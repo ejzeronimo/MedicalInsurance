@@ -2,15 +2,18 @@
 
 <head>
     <meta charset="utf-8">
-    <title>CNIT 280 Project</title>
-    <link rel="stylesheet" type="text/css"   href="/css/style.css">
+    <title>Medical Insurance Database</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script type="text/javascript" src="/js/adminDbGenerator.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    Databse SQL Will appear here
+<body onload="requestDatabaseInformationReadOnly()">
+    <div id="content">
+        <div id="UserTable"></div>
+    </div>
 </body>
 
 </html>
