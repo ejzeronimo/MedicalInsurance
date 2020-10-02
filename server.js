@@ -44,6 +44,23 @@ app.get('/patient', function (req, res) {
     res.sendFile(__dirname + "/public/patient.html");
 });
 
+app.get('/patient_page', function (req, res) {
+    var userKey = req.query.userKey
+    let database = {};
+
+    requestPatient = new tedious.Request("SELECT * FROM Users WHERE userId IN ('" + userKey + "');", function (err, rowCount, rows) {
+        database.User = rows;
+
+        requestInvoices = new tedious.Request("SELECT * FROM Invoices WHERE patientId IN ('" + userKey + "');", function (err, rowCount, rows) {
+            database.InvoiceTable = rows;
+            res.send(database)
+            
+        });
+        connection.execSql(requestInvoices);
+    });
+    connection.execSql(requestPatient);
+});
+
 app.get('/insurance', function (req, res) {
     res.sendFile(__dirname + "/public/insurance.html");
 });
@@ -166,14 +183,13 @@ app.post('/submit_login', function (req, res) {
                     res.redirect("/database");
                     break;
                 case 2:
-                    var string = encodeURIComponent(passkey);
                     res.redirect("/insurance?userKey=" + rows[0][1].value);
                     break;
                 case 3:
                     res.redirect("/");
                     break;
                 case 4:
-                    res.redirect("/patient");
+                    res.redirect("/patient?userKey=" + rows[0][1].value);
                     break;
             }
         } else {

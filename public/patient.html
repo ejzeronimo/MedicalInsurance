@@ -4,14 +4,23 @@
     <meta charset="utf-8">
     <title>Patient Bills</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script type="text/javascript" src="/js/patientPage.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body onload="requestDatabaseInformationReadOnly()">
+    <div id="topbar">
+        
+    </div>
     <div id="content">
-        current patient payment needs
+        <div id="UserTableInsurance">
+            User Data
+        </div>
+        <div id="InvoiceTableInsurance">
+            Outstanding Invoices
+        </div>
     </div>
 </body>
 
