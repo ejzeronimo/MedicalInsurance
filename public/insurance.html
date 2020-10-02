@@ -1,3 +1,4 @@
+<! doctype html>
 <html lang="en">
 
 <head>
@@ -13,12 +14,18 @@
 <body onload="requestDatabaseInformationReadOnly()">
     <div id="topbar">
         
-        <button type="button" id="insuranceRefreshButton">Caluclate and Pay Outstanding Balances</button>
+        <button type="button" id="insuranceRefreshButton" onclick="payOutstandingInvoicesAuto()" >Caluclate and Pay Outstanding Balances</button>
     </div>
     <div id="content">
-        <div id="InsurancePlanTable"></div>
-        <div id="UserTable"></div>
-        <div id="InvoiceTable"></div>
+        <div id="InsurancePlanTableInsurance">
+            Provided Plans
+        </div>
+        <div id="UserTableInsurance">
+            Current Plan Customers
+        </div>
+        <div id="InvoiceTableInsurance">
+            Outstanding Invoices
+        </div>
     </div>
 </body>
 

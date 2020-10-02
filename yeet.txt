@@ -1,0 +1,101 @@
+/****** Script for SelectTopNRows command from SSMS  *****
+SELECT * FROM Users
+
+CREATE TABLE Hospitals (
+    HospitalId uniqueidentifier NOT NULL PRIMARY KEY,
+    HospitalName varchar(60),
+    Address varchar(255),
+    City varchar(255),
+);
+
+
+INSERT INTO Hospitals (HospitalId,HospitalName, Address, City)
+VALUES ( NEWID() ,'Name', '75 North King Street Goose Creek', 'SC'),
+( NEWID() ,'Name', '7024 Thatcher Ave. Grand Island', 'NE'),
+( NEWID() ,'Name', '9036 Corona St. Mchenry', 'IL'),
+( NEWID() ,'Name', '62 Sulphur Springs Ave. Hopewell', 'VA'),
+( NEWID() ,'Name', '103 Indian Summer Street Harlingen', 'TX');
+
+
+UPDATE Hospitals
+SET HospitalName = 'Grand Island Emergency Center'
+WHERE HospitalId = '293DB398-0DB4-4ADD-B183-EFE7CF1F75D2';
+
+ALTER TABLE Users
+ADD userCurrentHospitalEmployerId uniqueidentifier FOREIGN KEY REFERENCES Hospitals(HospitalId);
+
+CREATE TABLE InsuranceFirms (
+    InsuranceId uniqueidentifier NOT NULL PRIMARY KEY,
+    FirmName varchar(60),
+    City varchar(255),
+);
+
+INSERT INTO InsuranceFirms (InsuranceId,FirmName, City)
+VALUES ( NEWID() ,'Heckler & Heckler', 'AL'),
+( NEWID() ,'AAAA Firms', 'IN'),
+( NEWID() ,'Regressive Insurance',  'KA');
+
+ALTER TABLE Users
+ADD userCurrentInsuranceEmployerId uniqueidentifier FOREIGN KEY REFERENCES InsuranceFirms(InsuranceId);
+
+INSERT INTO Users (UserId,UserName, AccessLevel, Passkey,userCurrentInsuranceEmployerId)
+VALUES ( NEWID() ,'PayForItAllPatient', '4', 'dontneednohelp' ,'85A60431-0E3B-4674-9DC7-88F74C3E4134');
+
+CREATE TABLE Treatments (
+    TreatmentId uniqueidentifier NOT NULL PRIMARY KEY,
+    Description varchar(255),
+    StandardPrice int,
+);
+INSERT INTO Treatments (TreatmentId,Description, StandardPrice)
+VALUES ( NEWID() ,'Partial Body Xray', 150);
+
+CREATE TABLE Invoices (
+    treatmentId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Treatments(TreatmentId),
+	hospitalId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Hospitals(HospitalId),
+    patientId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+	proctorId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    insuranceId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES InsuranceFirms(InsuranceId),
+	IsPaidByInsurance bit,
+	IsPaidByPatient bit,
+	PatientPaymentAmount int
+);
+
+CREATE TABLE InsurancePlans (
+	PlanId uniqueidentifier NOT NULL PRIMARY KEY,
+    insuranceProviderId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES InsuranceFirms(InsuranceId),
+	MinimumCharge int,
+	CoverageRate float
+);
+
+ALTER TABLE Users
+ADD userCurrentInsurancePlan uniqueidentifier FOREIGN KEY REFERENCES InsurancePlans(PlanId);
+
+ALTER TABLE InsurancePlans
+ADD PlanName varchar(100);
+
+INSERT INTO InsurancePlans (PlanName,PlanId,insuranceProviderId, MinimumCharge,CoverageRate)
+VALUES ('Less for More' ,NEWID() ,'B11785C2-737A-4636-94D3-4D78D03ECDD5', 150, .20);
+
+INSERT INTO Treatments (TreatmentId,Description, StandardPrice)
+VALUES ( NEWID() ,'Partial Body Xray', 150),( NEWID() ,'Broken ankle cast', 75),
+(NEWID(), 'Fever medication', 20);
+
+INSERT INTO Invoices (treatmentId,hospitalId,patientId, proctorId,insuranceId, IsPaidByInsurance, IsPaidByPatient, PatientPaymentAmount)
+VALUES ('AA270236-3A38-4512-85D3-FE991C3329CC' ,'2169A4FE-6011-4791-BD2A-43807D71B963' ,'62D754B3-D162-4BF7-93EB-0C648B44AF7A', '38943B1F-617E-459D-942E-99E30AB9B599', '');
+
+CREATE TABLE Invoices (
+    treatmentId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Treatments(TreatmentId),
+	hospitalId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Hospitals(HospitalId),
+    patientId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+	proctorId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+	IsPaidByInsurance bit,
+	IsPaidByPatient bit,
+	PatientPaymentAmount int
+);
+
+INSERT INTO Invoices (treatmentId,hospitalId,patientId, proctorId, IsPaidByInsurance, IsPaidByPatient, PatientPaymentAmount)
+VALUES ('AA270236-3A38-4512-85D3-FE991C3329CC' ,'2169A4FE-6011-4791-BD2A-43807D71B963' ,'62D754B3-D162-4BF7-93EB-0C648B44AF7A', '38943B1F-617E-459D-942E-99E30AB9B599', 0,0,0);
+*/
+
+
+

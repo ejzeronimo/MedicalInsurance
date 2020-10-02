@@ -70,3 +70,64 @@ th {
   height: 80%;
   width: 10%;
 }
+
+#welcomeText
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 30px;
+  position: relative;
+  top: 10%;
+  left: 1%;
+  float: left;
+  height: 80%;
+  width: auto;
+}
+
+#InsurancePlanTableInsurance
+{
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 45px;
+  margin: auto;
+  height: 80%;
+  width: auto;
+}
+
+#InsurancePlanTableInsurance table
+{
+  position: relative;
+  margin: auto;
+  width: auto;
+}
+
+#UserTableInsurance
+{
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 45px;
+  margin: auto;
+  height: 80%;
+  width: auto;
+}
+
+#UserTableInsurance table
+{
+  margin: auto;
+  width: auto;
+}
+
+#InvoiceTableInsurance
+{
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 45px;
+  margin: auto;
+  height: 80%;
+  width: auto;
+}
+
+#InvoiceTableInsurance table
+{
+  margin: auto;
+  width: auto;
+}
