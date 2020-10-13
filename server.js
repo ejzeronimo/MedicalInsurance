@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.listen(3000, function () {
-    console.log('listening for website requests on port: 3000');
+    console.log('Listening for website requests on port: 3000');
 });
 
 app.get('/', function (req, res) {
@@ -47,17 +47,21 @@ app.get('/', function (req, res) {
 });
 
 //////////////////////////////////////////////////////////////////////////////// SERVER LOGIN SYSTEM
-app.post('/submit_login', function (req, res) {
+app.post('/login_request', function (req, res) {
     //store the data in the unencrypted form
     var userId = req.body.id;
     var userPasskey = CryptoJS.AES.decrypt(req.body.passkey, "Secret Passphrase").toString(CryptoJS.enc.Utf8);
-    /*
-    request = new tedious.Request("SELECT AccessLevel, UserId FROM Users WHERE (UserName = '" + id + "') AND (Passkey = '" + passkey + "');", function (err, rowCount, rows) {
+    //now each table must be checked for a match (Patient, Doctor, Insurance Company, etc)
+    requestPatient = new tedious.Request("SELECT PatientId FROM Patient WHERE (UserName = '" + userId + "') AND (Password = '" + userPasskey + "');", function (err, rowCount, rows) {
         if (err) {
             console.log(err);
         }
         //assume that if it returns a row than they logged in
         if (rows[0] != undefined) {
+            res.send("/patient?userKey=" + rows[0][0].value);
+            //res.redirect("/patient?userKey=" + rows[0][1].value);
+            /*
+            //case statement to go through the patient access level
             switch (parseInt(rows[0][0].value, 10)) {
                 case 0:
                     res.redirect("/database");
@@ -70,17 +74,16 @@ app.post('/submit_login', function (req, res) {
                     break;
                 case 4:
                     res.redirect("/patient?userKey=" + rows[0][1].value);
-                    break;
-            }
+                    break;   
+            }*/
         } else {
-            res.redirect("/");
+            res.send("/");
         }
     });
-    */
-    //connection.execSql(request);
+    connection.execSql(requestPatient);
 });
 
-//////////////////////////////////////////////////////////////////////////////// SERVER OTHER PAGES
+//////////////////////////////////////////////////////////////////////////////// SERVER PATIENT PAGES
 app.get('/patient', function (req, res) {
     res.sendFile(__dirname + "/public/patient.html");
 });
@@ -95,7 +98,7 @@ app.get('/patient_page', function (req, res) {
         requestInvoices = new tedious.Request("SELECT * FROM Invoices WHERE patientId IN ('" + userKey + "');", function (err, rowCount, rows) {
             database.InvoiceTable = rows;
             res.send(database)
-            
+
         });
         connection.execSql(requestInvoices);
     });
@@ -167,36 +170,31 @@ function endThis(userKey, callback) {
     connection.execSql(requestUser);
 }
 
+//////////////////////////////////////////////////////////////////////////////// SERVER ADMIN DATABASE PAGES
 app.get('/database', function (req, res) {
     res.sendFile(__dirname + "/public/database.html");
 });
 
 app.get('/sql_database', function (req, res) {
-    var database = {};
-    requestInsuranceFirms = new tedious.Request("SELECT * FROM InsuranceFirms ORDER BY FirmName;", function (err, rowCount, rows) {
-        database.InsuranceTable = rows;
-        res.send(database);
+    var database = [];
+    requestTableNames = new tedious.Request("SELECT * FROM information_schema.tables;", function (err, rowCount, rows) {
+        var x = 0;
+        var loopArray = function (arr,data) {
+            requestDynamicTable = new tedious.Request("SELECT * FROM " + arr[x][2].value + ";", function (err, rowCount, rows) {
+                data.unshift(rows);
+                // any more items in array? continue loop
+                x++;
+                if (x < arr.length) {
+                    loopArray(arr,data);
+                }
+                else if (x == arr.length)
+                {
+                    res.send(data);
+                }
+            });
+            connection.execSql(requestDynamicTable);
+        }
+        loopArray(rows, database);
     });
-    requestInvoices = new tedious.Request("SELECT * FROM Invoices ORDER BY IsPaidByPatient;", function (err, rowCount, rows) {
-        database.InvoiceTable = rows;
-        connection.execSql(requestInsuranceFirms);
-    });
-    requestPlans = new tedious.Request("SELECT * FROM InsurancePlans ORDER BY CoverageRate;", function (err, rowCount, rows) {
-        database.InsurancePlanTable = rows;
-        connection.execSql(requestInvoices);
-    });
-    requestTreatements = new tedious.Request("SELECT * FROM Treatments ORDER BY StandardPrice;", function (err, rowCount, rows) {
-        database.TreatmentTable = rows;
-        connection.execSql(requestPlans);
-    });
-    requestHospitals = new tedious.Request("SELECT * FROM Hospitals ORDER BY HospitalName;", function (err, rowCount, rows) {
-        database.HospitalTable = rows;
-        connection.execSql(requestTreatements);
-    });
-    requestUsers = new tedious.Request("SELECT * FROM Users ORDER BY AccessLevel;", function (err, rowCount, rows) {
-        database.UserTable = rows;
-        connection.execSql(requestHospitals);
-    });
-
-    connection.execSql(requestUsers);
+    connection.execSql(requestTableNames);
 });
