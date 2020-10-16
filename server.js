@@ -56,23 +56,6 @@ app.post('/login_request', function (req, res) {
         //assume that if it returns a row than they logged in
         if (rows[0] != undefined) {
             res.send("/patient?userKey=" + rows[0][0].value);
-            //res.redirect("/patient?userKey=" + rows[0][1].value);
-            /*
-            //case statement to go through the patient access level
-            switch (parseInt(rows[0][0].value, 10)) {
-                case 0:
-                    res.redirect("/database");
-                    break;
-                case 2:
-                    res.redirect("/insurance?userKey=" + rows[0][1].value);
-                    break;
-                case 3:
-                    res.redirect("/");
-                    break;
-                case 4:
-                    res.redirect("/patient?userKey=" + rows[0][1].value);
-                    break;   
-            }*/
         } else {
             //need to check other login types here
             requestGovernment = new tedious.Request("SELECT GovOfficialId FROM Government_Official WHERE (UserName = '" + userId + "') AND (Password = '" + userPasskey + "');", function (err, rowCount, rows) {
@@ -86,8 +69,18 @@ app.post('/login_request', function (req, res) {
                         if (rows[0] != undefined) {
                             res.send("/insurance?userKey=" + rows[0][0].value);
                         } else {
-                            //now go back
-                            res.send("/");
+                            //check the last set of doctors
+                            requestDoctor = new tedious.Request("SELECT DoctorId FROM Doctor WHERE (UserName = '" + userId + "') AND (Password = '" + userPasskey + "');", function (err, rowCount, rows) {
+                                //assume that if it returns a row than they logged in
+                                if (rows[0] != undefined) {
+                                    //case statement to go through the patient access level
+                                    res.send("/doctor?userKey=" + rows[0][0].value);
+                                } else {
+                                    //now go back
+                                    res.send("/");
+                                }
+                            });
+                            connection.execSql(requestDoctor);
                         }
                     });
                     connection.execSql(requestInsurance);
@@ -132,7 +125,7 @@ app.get('/patient', function (req, res) {
 });
 
 app.get('/patient_page', function (req, res) {
-    var patientKey = req.query.userKey
+    var patientKey = req.query.userKey;
     let database = {};
 
     //request the patient data
@@ -148,7 +141,7 @@ app.get('/patient_page', function (req, res) {
                 requestInsurance = new tedious.Request("SELECT PlanId, PlanName, InsuranceCompanyId, (SELECT FirmName FROM Insurance_Company WHERE InsuranceCompanyId = (SELECT InsuranceCompanyId FROM Insurance_Plan WHERE PlanId IN ('" + database.User[0][6].value + "'))) FROM Insurance_Plan WHERE PlanId IN ('" + database.User[0][6].value + "');", function (err, rowCount, rows) {
                     database.Insurance = rows;
                     //now get the invoices that havent been paid yet
-                    requestInvoice = new tedious.Request("SELECT * FROM Invoice WHERE PatientId IN ('" + patientKey + "');", function (err, rowCount, rows) {
+                    requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor, DateIssued, (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, OutstandingBalance FROM Invoice WHERE PatientId IN ('" + patientKey + "') AND IsPaidByPatient = 0 ORDER BY DateIssued;", function (err, rowCount, rows) {
                         database.Invoice = rows;
                         //now send it to the website
                         res.send(database)
@@ -164,13 +157,19 @@ app.get('/patient_page', function (req, res) {
     connection.execSql(requestPatient);
 });
 
+app.post('/pay_invoice', function (req, res) {
+    //need to add next sprint
+    //temp no edit database
+    res.send(null);
+});
+
 //////////////////////////////////////////////////////////////////////////////// SERVER GOVERNMENT PAGES
 app.get('/government', function (req, res) {
     res.sendFile(__dirname + "/public/government.html");
 });
 
 app.get('/government_page', function (req, res) {
-    var govKey = req.query.userKey
+    var govKey = req.query.userKey;
     let database = {};
 
     //request every treatment
@@ -191,14 +190,18 @@ app.post('/add_treatment', function (req, res) {
     addTreatment = new tedious.Request("INSERT INTO Treatment (TreatmentId, Description,Price, GovOfficialId) VALUES (NEWID(),'" + req.body.description + "'," + req.body.price + ",'" + req.body.govId + "');", function (err, rowCount, rows) {
         res.send(err);
     });
-    connection.execSql(addTreatment);
+    //connection.execSql(addTreatment);
+    //temp no edit database
+    res.send(null);
 });
 
 app.post('/add_drug', function (req, res) {
     addDrug = new tedious.Request("INSERT INTO Drug (DrugId, Description,Price, GovOfficialId) VALUES (NEWID(),'" + req.body.description + "'," + req.body.price + ",'" + req.body.govId + "');", function (err, rowCount, rows) {
         res.send(err);
     });
-    connection.execSql(addDrug);
+    //connection.execSql(addDrug);
+    //temp no edit database
+    res.send(null);
 });
 
 //////////////////////////////////////////////////////////////////////////////// SERVER INSURANCE PAGES
@@ -207,21 +210,128 @@ app.get('/insurance', function (req, res) {
 });
 
 app.get('/insurance_page', function (req, res) {
-    var userKey = req.query.userKey
+    var insuranceKey = req.query.userKey;
+    let database = {};
 
-    endThis(userKey, function (val) {
-        let database = {};
-        database.User = val;
-        requestInsuranceFirm = new tedious.Request("SELECT * FROM InsuranceFirms WHERE InsuranceId  = '" + database.User[0][5].value + "';", function (err, rowCount, rows) {
-            database.InsuranceTable = rows;
-            //callback here
-            endthat(database, res)
+    //get all of the firm data
+    requestFirm = new tedious.Request("SELECT * FROM Insurance_Company WHERE InsuranceCompanyId IN ('" + insuranceKey + "');", function (err, rowCount, rows) {
+        database.Firm = rows;
+        //now get the firm contact data
+        requestContact = new tedious.Request("SELECT * FROM Contact WHERE ContactId IN ('" + database.Firm[0][4].value + "');", function (err, rowCount, rows) {
+            database.Contact = rows;
+            //get every plan offered by the firm
+            requestPlan = new tedious.Request("SELECT * FROM Insurance_Plan WHERE InsuranceCompanyId IN ('" + insuranceKey + "');", function (err, rowCount, rows) {
+                database.Plan = rows;
+                //now get all invoices with involved patients
+                var planList = "";
+                for (var i = 0; i < database.Plan.length; i++) {
+                    if (i > 0) {
+                        planList += ",";
+                    }
+                    planList += "'" + database.Plan[i][0].value + "'";
+                }
+                requestPatient = new tedious.Request("SELECT PatientId FROM Patient WHERE PlanId IN (" + planList + ");", function (err, rowCount, rows) {
+                    database.Patient = rows;
+                    //now get those invoices
+                    var patientList = "";
+                    for (var i = 0; i < database.Patient.length; i++) {
+                        if (i > 0) {
+                            patientList += ",";
+                        }
+                        patientList += "'" + database.Patient[i][0].value + "'";
+                    }
+                    requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor, DateIssued, (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, OutstandingBalance FROM Invoice WHERE PatientId IN ("+patientList+") AND IsPaidByInsurance = 0 ORDER BY DateIssued;", function (err, rowCount, rows) {
+                        database.Invoice = rows;
+                        //now send it to the website
+                        res.send(database)
+                    });
+                    connection.execSql(requestInvoice);
+                });
+                connection.execSql(requestPatient)
+            });
+            connection.execSql(requestPlan);
         });
-        requestPlans = new tedious.Request("SELECT * FROM InsurancePlans WHERE insuranceProviderId = '" + database.User[0][5].value + "' ORDER BY CoverageRate;", function (err, rowCount, rows) {
-            database.InsurancePlanTable = rows;
-            connection.execSql(requestInsuranceFirm);
-        });
-
-        connection.execSql(requestPlans);
+        connection.execSql(requestContact);
     });
+    connection.execSql(requestFirm);
+});
+
+app.post('/pay_insurance', function (req, res) {
+    //need to add next sprint
+    //temp no edit database
+    res.send(null);
+});
+
+//////////////////////////////////////////////////////////////////////////////// SERVER DOCTOR PAGES
+app.get('/doctor', function (req, res) {
+    res.sendFile(__dirname + "/public/doctor.html");
+});
+
+app.get('/doctor_page', function (req, res) {
+    var docKey = req.query.userKey;
+    let database = {};
+
+    //request the doctor data
+    requestDoctor = new tedious.Request("SELECT * FROM Doctor WHERE DoctorId IN ('" + docKey + "');", function (err, rowCount, rows) {
+        database.Doctor = rows;
+        //request the contact data
+        requestContact = new tedious.Request("SELECT * FROM Contact WHERE ContactId IN ('" + database.Doctor[0][7].value + "');", function (err, rowCount, rows) {
+            database.Contact = rows;
+            //now the get the hospital data
+            requestContact = new tedious.Request("SELECT * FROM Hospital WHERE HospitalId IN ('" + database.Doctor[0][8].value + "');", function (err, rowCount, rows) {
+                database.Hospital = rows;
+                var requestString = "";
+                //now the get the required invoices
+                switch (database.Doctor[0][4].value) {
+                    case 0:
+                        requestList = new tedious.Request("SELECT DoctorId FROM Doctor WHERE HospitalId IN ('" + database.Doctor[0][8].value + "');", function (err, rowCount, rows) {
+                            var docList = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                if (i > 0) {
+                                    docList += ",";
+                                }
+                                docList += "'" + rows[i][0].value + "'";
+                            }
+                            requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ("+docList+") ORDER BY DateIssued;", function (err, rowCount, rows) {
+                                database.Invoice = rows;
+                                //now send that stuff
+                                res.send(database)
+                            });
+                            connection.execSql(requestInvoice);
+                        });
+                        connection.execSql(requestList);
+                        break;
+                    case 1:
+                        requestList = new tedious.Request("SELECT DoctorId FROM Doctor WHERE Department IN ('" + database.Doctor[0][3].value + "');", function (err, rowCount, rows) {
+                            var docList = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                if (i > 0) {
+                                    docList += ",";
+                                }
+                                docList += "'" + rows[i][0].value + "'";
+                            }
+                            requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ("+docList+") ORDER BY DateIssued;", function (err, rowCount, rows) {
+                                database.Invoice = rows;
+                                //now send that stuff
+                                res.send(database)
+                            });
+                            connection.execSql(requestInvoice);
+                        });
+                        connection.execSql(requestList);
+                        break;
+                    case 2:
+                        requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ('"+docKey+"') ORDER BY DateIssued;", function (err, rowCount, rows) {
+                            database.Invoice = rows;
+                            //now send that stuff
+                            res.send(database)
+                        });
+                        connection.execSql(requestInvoice);
+                        break;
+                }
+            });
+            connection.execSql(requestContact);
+        });
+        connection.execSql(requestContact);
+    });
+    connection.execSql(requestDoctor);
 });

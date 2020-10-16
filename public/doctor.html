@@ -1,0 +1,53 @@
+<! doctype html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Doctor Overview Page</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <script type="text/javascript" src="/js/doctorPage.js"></script>
+
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    </head>
+
+    <body onload="requestDatabaseInformationReadOnly()">
+        <div id="topbar">
+            <div id="userInfo"><b>Welcome:</b><br></div>
+            <div id="outstandingBills"></div>
+            <div id="insuranceInfo"></div>
+            <div id="contactInfo"></div>
+        </div>
+        <div id="content">
+            <div id="createInvoiceTable">
+                New Invoice:
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Patient</th>
+                            <th>TreatmentId</th>
+                            <th>DrugId</th>
+                            <th>Submit</th>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="" name="description" value="PatientID"></td>
+                            <td><input type="text" id="" name="description" value="TreatmentId"></td>
+                            <td><input type="text" id="" name="description" value="DrugId"></td>
+                            <td><button type="button" onclick="addInvoiceToSystem()">Refresh</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="patientTable">
+                Invoices Not Payed By Patients:
+            </div>
+            <div id="insuranceTable">
+                Invoices Not Payed By Insurance:
+            </div>
+            <div id="invoiceTable">
+                All Invoices By Date:
+            </div>
+        </div>
+    </body>
+
+    </html>

@@ -13,26 +13,17 @@
 
 <body onload="requestDatabaseInformationReadOnly()">
     <div id="topbar">
-        <div id="userInfo"></div>
+        <div id="userInfo"><b>Welcome:</b><br></div>
         <div id="outstandingBills"></div>
-        <div id="buttonContainer">
-            <input type="text" id="treatmentDescription" name="description" value="treatment description">
-            <input type="number" id="treatmentPrice" name="description" value="000.00">
-            <button type="button" id="govButton" onclick="addTreatmentToSystem()">Add Treatment</button>
-            <input type="text" id="drugDescription" name="description" value="drug description">
-            <input type="number" id="drugPrice" name="description" value="000.00">
-            <button type="button" id="govButton" onclick="addDrugToSystem()">Add Drug</button>
-        </div>
+        <div id="insuranceInfo"></div>
+        <div id="contactInfo"></div>
     </div>
     <div id="content">
-        <div id="InsurancePlanTableInsurance">
-            Provided Plans
+        <div id="planTable">
+            Provided Plans:
         </div>
-        <div id="UserTableInsurance">
-            Current Plan Customers
-        </div>
-        <div id="InvoiceTableInsurance">
-            Outstanding Invoices
+        <div id="invoiceTable">
+            Outstanding Invoices:
         </div>
     </div>
 </body>

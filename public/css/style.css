@@ -123,6 +123,16 @@ body {
   
 }
 
+#content div
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 50px;
+  text-align: center;
+  margin: 0 auto;
+  width: fit-content;
+  height: auto;
+}
+
 table,
 th,
 td {
@@ -138,38 +148,8 @@ th {
   font-size: 30px;
 }
 
-#invoiceTable
-{
-  font-family: 'Roboto', sans-serif;
-  font-size: 50px;
-  text-align: center;
-  margin: 0 auto;
-  width: fit-content;
-  height: auto;
-}
-
 /* for the government page only */
 #govButton
 {
   width: 33% !important;
-}
-
-#treatmentTable
-{
-  font-family: 'Roboto', sans-serif;
-  font-size: 50px;
-  text-align: center;
-  margin: 0 auto;
-  width: fit-content;
-  height: auto;
-}
-
-#drugTable
-{
-  font-family: 'Roboto', sans-serif;
-  font-size: 50px;
-  text-align: center;
-  margin: 0 auto;
-  width: fit-content;
-  height: auto;
 }

@@ -32,8 +32,33 @@ function personalizePage() {
     }
 }
 
-function makeInvoiceButton(data) {
-    return '<button type="button" onclick="payOutstandingInvoice(' + data + ')" >Pay Invoice</button>';
+function changeInsuranceInformation()
+{
+    alert("Will be added during next production sprint")
+}
+
+function changeAddressInformation()
+{
+    alert("Will be added during next production sprint")
+}
+
+function changeBillingInformation()
+{
+    alert("Will be added during next production sprint")
+}
+
+function payOutstandingInvoice(index)
+{
+    $.post("/pay_invoice", {
+        foo: index
+    }, function (data, status, xhr) {
+        if (Object.keys(data).length == 0) {
+            alert("The payment is being processed, will take up to 24 hours");
+            location.reload();
+        } else {
+            alert(data);
+        }
+    });
 }
 
 function generateInvoiceTable() {
@@ -42,7 +67,7 @@ function generateInvoiceTable() {
         for (var i = 0; i < database.Invoice[0].length; i++) {
             outputHtml += "<th>" + database.Invoice[0][i].metadata.colName + "</th>";
         }
-        outputHtml += "</tr>";
+        outputHtml += "<th>Pay</th></tr>";
         //iterate through the User table
         for (var i = 0; i < database.Invoice.length; i++) {
             // for each row (unique user)
@@ -51,12 +76,10 @@ function generateInvoiceTable() {
                 // for each data point
                 outputHtml += "<td>" + database.Invoice[i][j].value + "</td>";
             }
-            outputHtml += "</tr>";
+            outputHtml += '<th><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></th></tr>';
         }
         outputHtml += "</table> </div>";
         //add it to the div
-        document.body.innerHTML += outputHtml;
+        document.getElementById("invoiceTable").innerHTML = outputHtml;
     }
-    //add it to the div
-    document.getElementById("invoiceTable").innerHTML = outputHtml;
 }
