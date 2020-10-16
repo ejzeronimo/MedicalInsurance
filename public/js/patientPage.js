@@ -1,4 +1,4 @@
-//this will genrate every tabel from the db
+//this will load jquery into the website
 var script = document.createElement('script');
 script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
@@ -6,76 +6,57 @@ document.getElementsByTagName('head')[0].appendChild(script);
 
 var database = {};
 
-function requestDatabaseInformationReadOnly() 
-{
-    const queryString = window.location.search.replace("?userKey=","");
+function requestDatabaseInformationReadOnly() {
+    var queryString = window.location.search.replace("?userKey=", "");
 
     $.get("/patient_page?userKey=" + encodeURIComponent(queryString), function (data, status) {
-        database = data
+        database = data;
         console.log(database);
 
-        //say hello
-        document.getElementById("topbar").innerHTML += '<div id="welcomeText"> Welcome: ' + database.User[0][2].value + "</div>";
-        generateUserTable();
+        //load the topbar with all needed information
+        personalizePage();
         generateInvoiceTable();
     });
 }
 
-function payOutstandingInvoice(index)
-{
-    if(confirm("You are confirming that the invoice is to be calculated and paid for the \nTreatment: " + database.InvoiceTable[index][0].value +  "\nHospital: " + database.InvoiceTable[index][1].value+  "\nPatient: " + database.InvoiceTable[index][2].value +  "\nProctor: " + database.InvoiceTable[index][3].value +  "\nAre you sure this is the correct invoice?"))
-    {
-        alert("Command has been sent to the database to be processed, database will be updated accordingly once the request copmpletes.");
+function personalizePage() {
+    //make the welcome text say the name of the user
+    document.getElementById("userInfo").innerHTML += database.User[0][4].value + ', ' + database.User[0][3].value;
+    //now get the address of the user
+    document.getElementById("contactInfo").innerHTML += database.Contact[0][1].value + " " + database.Contact[0][2].value + ",<br>" + database.Contact[0][3].value + " " + database.Contact[0][4].value + "<br> Phone: " + database.Contact[0][5].value + "<br> Email: " + database.Contact[0][6].value;
+    //set insurance to none if the id is null
+    if (database.User[0][6].value == undefined) {
+        document.getElementById("insuranceInfo").innerHTML = "No viable insurance plan";
+    } else {
+        document.getElementById("insuranceInfo").innerHTML += "Insurance Plan:<br>" + database.Insurance[0][1].value + "<br>Provided By:<br>" + database.Insurance[0][3].value;
     }
 }
 
-function generateUserTable() {
-    outputHtml = "<table> <tr>";
-    for (var i = 0; i < database.User[0].length; i++) {
-        outputHtml += "<th>" + database.User[0][i].metadata.colName + "</th>";
-    }
-    outputHtml += "</tr>";
-    //iterate through the User table
-    for (var i = 0; i < database.User.length; i++) {
-        // for each row (unique user)
-        outputHtml += "<tr>";
-        for (var j = 0; j < database.User[i].length; j++) {
-            // for each data point
-            outputHtml += "<td>" + database.User[i][j].value + "</td>";
-        }
-        outputHtml += "</tr>";
-    }
-    outputHtml += "</table>";
-    //add it to the div
-    document.getElementById("UserTableInsurance").innerHTML += outputHtml;
+function makeInvoiceButton(data) {
+    return '<button type="button" onclick="payOutstandingInvoice(' + data + ')" >Pay Invoice</button>';
 }
-
-function makeInvoiceButton(data)
-{
-    return  '<button type="button" onclick="payOutstandingInvoice('+ data +')" >Pay Invoice</button>';
-}
-
 
 function generateInvoiceTable() {
-    outputHtml = "<table> <tr>";
-    for (var i = 0; i < database.InvoiceTable[0].length; i++) {
-        outputHtml += "<th>" + database.InvoiceTable[0][i].metadata.colName + "</th>";
-    }
-    //will add teh button row
-    outputHtml += "<th> Pay Invoice </th>";
-    outputHtml += "</tr>";
-    //iterate through the User table
-    for (var i = 0; i < database.InvoiceTable.length; i++) {
-        // for each row (unique user)
-        outputHtml += "<tr>";
-        for (var j = 0; j < database.InvoiceTable[i].length; j++) {
-            // for each data point
-            outputHtml += "<td>" + database.InvoiceTable[i][j].value + "</td>";
+    if (database.Invoice.length > 0) {
+        var outputHtml = "<div class='Table'> <table> <tr>";
+        for (var i = 0; i < database.Invoice[0].length; i++) {
+            outputHtml += "<th>" + database.Invoice[0][i].metadata.colName + "</th>";
         }
-        outputHtml += "<td>" + makeInvoiceButton(i) + "</td>";
         outputHtml += "</tr>";
+        //iterate through the User table
+        for (var i = 0; i < database.Invoice.length; i++) {
+            // for each row (unique user)
+            outputHtml += "<tr>";
+            for (var j = 0; j < database.Invoice[i].length; j++) {
+                // for each data point
+                outputHtml += "<td>" + database.Invoice[i][j].value + "</td>";
+            }
+            outputHtml += "</tr>";
+        }
+        outputHtml += "</table> </div>";
+        //add it to the div
+        document.body.innerHTML += outputHtml;
     }
-    outputHtml += "</table>";
     //add it to the div
-    document.getElementById("InvoiceTableInsurance").innerHTML += outputHtml;
+    document.getElementById("invoiceTable").innerHTML = outputHtml;
 }

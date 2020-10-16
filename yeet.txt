@@ -96,3 +96,21 @@ CREATE TABLE Invoices (
 INSERT INTO Invoices (treatmentId,hospitalId,patientId, proctorId, IsPaidByInsurance, IsPaidByPatient, PatientPaymentAmount)
 VALUES ('AA270236-3A38-4512-85D3-FE991C3329CC' ,'2169A4FE-6011-4791-BD2A-43807D71B963' ,'62D754B3-D162-4BF7-93EB-0C648B44AF7A', '38943B1F-617E-459D-942E-99E30AB9B599', 0,0,0);
 */
+
+/*
+
+
+INSERT INTO Contact (ContactId)
+VALUES (NEWID());
+
+VALUES (NEWID(), 'testpatient', 'testpassword', 'John', 'Doe', );
+
+
+INSERT INTO Patient (patientId,UserName,Password, FirstName, LastName, ContactId)
+VALUES (NEWID(), 'testpatient', 'testpassword', 'John', 'Doe','D2481B35-E280-48AB-B213-E741096CDA70');
+
+SELECT 
+    TABLE_NAME
+FROM
+    information_schema.tables;
+*/

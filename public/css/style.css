@@ -3,7 +3,7 @@ body {
   color: white;
   font-family: 'Open Sans', sans-serif;
 }
-
+/* login panel only */
 #loginPanel {
   font-family: 'Open Sans', sans-serif;
   border-style: solid;
@@ -26,11 +26,67 @@ body {
   font-size: 30px;
 }
 
-#content {
-  top: 20%;
-  left: 0px;
-  position: fixed;
-  width: 100%;
+/* for every single top panel */
+#userInfo
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 30px;
+  padding-top: 1%;
+  padding-left: 1%;
+  height: auto;
+  width: auto;
+}
+
+#outstandingBills
+{
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  font-size: 40px;
+  padding-top: 1%;
+  height: auto;
+  width: auto;
+  flex-grow: 2;
+}
+
+#insuranceInfo
+{
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  padding-top: 1.5%;
+  padding-right: 1%;
+  height: auto;
+  width: auto;
+}
+
+#contactInfo
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  padding-top: 1.5%;
+  padding-right: 1%;
+  height: auto;
+  width: auto;
+}
+
+#buttonContainer
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 30px;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  padding-right: 0.5%;
+  height: auto;
+  width: auto;
+}
+
+#buttonContainer button
+{
+  padding: 0%;
+  font-size: 15px;
+  float: left;
+  height: 50%;
+  width: 50%;
 }
 
 #topbar{
@@ -44,6 +100,18 @@ body {
   background-color: gray;
   height: 10%;
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+/* for every single content panel */
+#content {
+  top: 12%;
+  left: 0px;
+  position: fixed;
+  width: 100%;
+  
 }
 
 table,
@@ -61,73 +129,12 @@ th {
   font-size: 30px;
 }
 
-#insuranceRefreshButton
-{
-  position: relative;
-  top: 10%;
-  right: 1%;
-  float: right;
-  height: 80%;
-  width: 10%;
-}
-
-#welcomeText
+#invoiceTable
 {
   font-family: 'Roboto', sans-serif;
-  font-size: 30px;
-  position: relative;
-  top: 10%;
-  left: 1%;
-  float: left;
-  height: 80%;
-  width: auto;
-}
-
-#InsurancePlanTableInsurance
-{
+  font-size: 50px;
   text-align: center;
-  font-family: 'Roboto', sans-serif;
-  font-size: 45px;
-  margin: auto;
-  height: 80%;
-  width: auto;
-}
-
-#InsurancePlanTableInsurance table
-{
-  position: relative;
-  margin: auto;
-  width: auto;
-}
-
-#UserTableInsurance
-{
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-  font-size: 45px;
-  margin: auto;
-  height: 80%;
-  width: auto;
-}
-
-#UserTableInsurance table
-{
-  margin: auto;
-  width: auto;
-}
-
-#InvoiceTableInsurance
-{
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-  font-size: 45px;
-  margin: auto;
-  height: 80%;
-  width: auto;
-}
-
-#InvoiceTableInsurance table
-{
-  margin: auto;
-  width: auto;
+  margin: 0 auto;
+  width: fit-content;
+  height: auto;
 }

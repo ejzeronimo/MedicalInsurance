@@ -1,10 +1,10 @@
-//the server
+//////////////////////////////////////////////////////////////////////////////// GLOBALS
 const express = require('express');
 var bodyParser = require('body-parser');
 var tedious = require('tedious');
 var CryptoJS = require("crypto-js");
 
-//////////////////////////////////////////////////////////////////////////////// SQL CONFIGS
+//////////////////////////////////////////////////////////////////////////////// SQL CONFIGS AND CONNECTION
 var config = {
     server: '172.16.17.117',
     authentication: {
@@ -83,28 +83,72 @@ app.post('/login_request', function (req, res) {
     connection.execSql(requestPatient);
 });
 
+//////////////////////////////////////////////////////////////////////////////// SERVER DATABASE PAGE
+app.get('/database', function (req, res) {
+    res.sendFile(__dirname + "/public/database.html");
+});
+
+app.get('/sql_database', function (req, res) {
+    var database = [];
+    requestTableNames = new tedious.Request("SELECT * FROM information_schema.tables;", function (err, rowCount, rows) {
+        var x = 0;
+        var loopArray = function (arr, data) {
+            requestDynamicTable = new tedious.Request("SELECT * FROM " + arr[x][2].value + ";", function (err, rowCount, rows) {
+                data.unshift(rows);
+                // any more items in array? continue loop
+                x++;
+                if (x < arr.length) {
+                    loopArray(arr, data);
+                } else if (x == arr.length) {
+                    res.send(data);
+                }
+            });
+            connection.execSql(requestDynamicTable);
+        }
+        loopArray(rows, database);
+    });
+    connection.execSql(requestTableNames);
+});
+
 //////////////////////////////////////////////////////////////////////////////// SERVER PATIENT PAGES
 app.get('/patient', function (req, res) {
     res.sendFile(__dirname + "/public/patient.html");
 });
 
 app.get('/patient_page', function (req, res) {
-    var userKey = req.query.userKey
+    var patientKey = req.query.userKey
     let database = {};
 
-    requestPatient = new tedious.Request("SELECT * FROM Users WHERE userId IN ('" + userKey + "');", function (err, rowCount, rows) {
+    //request the patient data
+    requestPatient = new tedious.Request("SELECT * FROM Patient WHERE PatientId IN ('" + patientKey + "');", function (err, rowCount, rows) {
         database.User = rows;
-
-        requestInvoices = new tedious.Request("SELECT * FROM Invoices WHERE patientId IN ('" + userKey + "');", function (err, rowCount, rows) {
-            database.InvoiceTable = rows;
-            res.send(database)
-
+        //now get the patient contact data
+        requestContact = new tedious.Request("SELECT * FROM Contact WHERE ContactId IN ('" + database.User[0][5].value + "');", function (err, rowCount, rows) {
+            database.Contact = rows;
+            //now get all of the patient billing information
+            requestBilling = new tedious.Request("SELECT * FROM Billing_Information WHERE PatientId IN ('" + patientKey + "');", function (err, rowCount, rows) {
+                database.Billing = rows;
+                //now get the insurance plan
+                requestInsurance = new tedious.Request("SELECT PlanId, PlanName, InsuranceCompanyId, (SELECT FirmName FROM Insurance_Company WHERE InsuranceCompanyId = (SELECT InsuranceCompanyId FROM Insurance_Plan WHERE PlanId IN ('" + database.User[0][6].value + "'))) FROM Insurance_Plan WHERE PlanId IN ('" + database.User[0][6].value + "');", function (err, rowCount, rows) {
+                    database.Insurance = rows;
+                    //now get the invoices that havent been paid yet
+                    requestInvoice= new tedious.Request("SELECT * FROM Invoice WHERE PatientId IN ('" + patientKey + "');", function (err, rowCount, rows) {
+                        database.Invoice = rows;
+                        //now send it to the website
+                        res.send(database)
+                    });
+                    connection.execSql(requestInvoice);
+                });
+                connection.execSql(requestInsurance);
+            });
+            connection.execSql(requestBilling);
         });
-        connection.execSql(requestInvoices);
+        connection.execSql(requestContact);
     });
     connection.execSql(requestPatient);
 });
 
+//////////////////////////////////////////////////////////////////////////////// SERVER INSURANCE PAGES
 app.get('/insurance', function (req, res) {
     res.sendFile(__dirname + "/public/insurance.html");
 });
@@ -169,32 +213,3 @@ function endThis(userKey, callback) {
     });
     connection.execSql(requestUser);
 }
-
-//////////////////////////////////////////////////////////////////////////////// SERVER ADMIN DATABASE PAGES
-app.get('/database', function (req, res) {
-    res.sendFile(__dirname + "/public/database.html");
-});
-
-app.get('/sql_database', function (req, res) {
-    var database = [];
-    requestTableNames = new tedious.Request("SELECT * FROM information_schema.tables;", function (err, rowCount, rows) {
-        var x = 0;
-        var loopArray = function (arr,data) {
-            requestDynamicTable = new tedious.Request("SELECT * FROM " + arr[x][2].value + ";", function (err, rowCount, rows) {
-                data.unshift(rows);
-                // any more items in array? continue loop
-                x++;
-                if (x < arr.length) {
-                    loopArray(arr,data);
-                }
-                else if (x == arr.length)
-                {
-                    res.send(data);
-                }
-            });
-            connection.execSql(requestDynamicTable);
-        }
-        loopArray(rows, database);
-    });
-    connection.execSql(requestTableNames);
-});

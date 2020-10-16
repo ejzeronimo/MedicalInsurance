@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Patient Bills</title>
+    <title>Patient User Page</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script type="text/javascript" src="/js/patientPage.js"></script>
 
@@ -12,14 +12,20 @@
 
 <body onload="requestDatabaseInformationReadOnly()">
     <div id="topbar">
-        
+        <div id="userInfo"><b>Welcome:</b><br></div>
+        <div id="outstandingBills"></div>
+        <div id="insuranceInfo"></div>
+        <div id="contactInfo"></div>
+        <div id="buttonContainer">
+            <button type="button" onclick="changeBillingInformation()">Change Billing</button>
+            <button type="button" onclick="changeAddressInformation()">Change Address</button>
+            <button type="button" onclick="changeInsuranceInformation()">Change Insurance</button>
+            <button type="button" onclick="location.reload()">Refresh</button>
+        </div>
     </div>
     <div id="content">
-        <div id="UserTableInsurance">
-            User Data
-        </div>
-        <div id="InvoiceTableInsurance">
-            Outstanding Invoices
+        <div id="invoiceTable">
+            No Outstanding Invoices!
         </div>
     </div>
 </body>
