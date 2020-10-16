@@ -88,6 +88,15 @@ body {
   height: 50%;
   width: 50%;
 }
+#buttonContainer input
+{
+  padding: 0%;
+  font-size: 15px;
+  float: left;
+  height: 50%;
+  width: 33%;
+}
+
 
 #topbar{
   position: absolute;
@@ -130,6 +139,32 @@ th {
 }
 
 #invoiceTable
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 50px;
+  text-align: center;
+  margin: 0 auto;
+  width: fit-content;
+  height: auto;
+}
+
+/* for the government page only */
+#govButton
+{
+  width: 33% !important;
+}
+
+#treatmentTable
+{
+  font-family: 'Roboto', sans-serif;
+  font-size: 50px;
+  text-align: center;
+  margin: 0 auto;
+  width: fit-content;
+  height: auto;
+}
+
+#drugTable
 {
   font-family: 'Roboto', sans-serif;
   font-size: 50px;

@@ -11,7 +11,7 @@ function login() {
     $.post("/login_request", {
         id: document.getElementById("id").value,
         passkey: CryptoJS.AES.encrypt(document.getElementById("passkey").value, "Secret Passphrase").toString()
-    },function(data,status,xhr){
+    }, function (data, status, xhr) {
         window.location.assign(data)
     });
 }

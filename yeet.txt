@@ -114,3 +114,15 @@ SELECT
 FROM
     information_schema.tables;
 */
+
+/*
+INSERT INTO Doctor (DoctorId)
+VALUES (NEWID());
+SELECT CONVERT (date, GETDATE())
+
+INSERT INTO Invoice (PatientId, DoctorId, DateIssued)
+VALUES ('D369D022-DB38-4C0C-90C8-49140C87ADE4','AE10C12F-DA6C-4684-B20A-D26540F4D0A9',CONVERT (date, GETDATE()));
+*/
+
+INSERT INTO Government_Official(GovOfficialId)
+VALUES (NEWID());
