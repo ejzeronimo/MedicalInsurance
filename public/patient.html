@@ -11,13 +11,39 @@
 </head>
 
 <body onload="requestDatabaseInformationReadOnly()">
+    <div id="form" style="display:none;">
+        <div id="formData">
+            <div id="loginText">Edit Billing Information:</div>
+            <label>Payment Type:</label><br>
+            <select id="billingType" onchange="changeBillingType()">
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+            </select><br>
+            <form id="billingCash">
+                <label for="lname">You will be required to pay cash in person within 30 days of this decision. <br> Is that ok?</label><br>
+                <input type="radio" name="consent" value="no">
+                <label for="no">Do not accept</label><br>
+                <input type="radio" id="consentYes" name="consent" value="yes">
+                <label for="yes">I accept</label>
+            </form>
+            <form id="billingCard" style="display:none;">
+                <label for="cardnumber">Card Number:</label><br>
+                <input type="text" id="cardNumber" name="cardnumber" value=""><br>
+                <label for="cvv">CVV:</label><br>
+                <input type="text" id="cvv" name="cvv" value=""><br>
+                <label for="expirationdate">Expiration Date:</label><br>
+                <input type="text" id="expirationDate" name="expirationdate" value="mm/yyyy">
+            </form>
+            <input type="button" value="Submit" onclick="updateBillingInformation()">
+        </div>
+    </div>
     <div id="topbar">
         <div id="userInfo"><b>Welcome:</b><br></div>
         <div id="outstandingBills"></div>
         <div id="insuranceInfo"></div>
         <div id="contactInfo"></div>
         <div id="buttonContainer">
-            <button type="button" onclick="changeBillingInformation()">Change Billing</button>
+            <button type="button" onclick="document.getElementById('form').style.display = 'block'">Change Billing</button>
             <button type="button" onclick="changeAddressInformation()">Change Address</button>
             <button type="button" onclick="changeInsuranceInformation()">Change Insurance</button>
             <button type="button" onclick="location.reload()">Refresh</button>

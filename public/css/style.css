@@ -3,6 +3,7 @@ body {
   color: white;
   font-family: 'Open Sans', sans-serif;
 }
+
 /* login panel only */
 #loginPanel {
   font-family: 'Open Sans', sans-serif;
@@ -27,8 +28,7 @@ body {
 }
 
 /* for every single top panel */
-#userInfo
-{
+#userInfo {
   font-family: 'Roboto', sans-serif;
   font-size: 30px;
   padding-top: 1%;
@@ -37,8 +37,7 @@ body {
   width: auto;
 }
 
-#outstandingBills
-{
+#outstandingBills {
   font-family: 'Roboto', sans-serif;
   text-align: center;
   font-size: 40px;
@@ -48,8 +47,7 @@ body {
   flex-grow: 2;
 }
 
-#insuranceInfo
-{
+#insuranceInfo {
   text-align: center;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
@@ -59,8 +57,7 @@ body {
   width: auto;
 }
 
-#contactInfo
-{
+#contactInfo {
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
   padding-top: 1.5%;
@@ -69,8 +66,7 @@ body {
   width: auto;
 }
 
-#buttonContainer
-{
+#buttonContainer {
   font-family: 'Roboto', sans-serif;
   font-size: 30px;
   padding-top: 0.5%;
@@ -80,16 +76,15 @@ body {
   width: auto;
 }
 
-#buttonContainer button
-{
+#buttonContainer button {
   padding: 0%;
   font-size: 15px;
   float: left;
   height: 50%;
   width: 50%;
 }
-#buttonContainer input
-{
+
+#buttonContainer input {
   padding: 0%;
   font-size: 15px;
   float: left;
@@ -98,7 +93,7 @@ body {
 }
 
 
-#topbar{
+#topbar {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -120,11 +115,10 @@ body {
   left: 0px;
   position: fixed;
   width: 100%;
-  
+
 }
 
-#content div
-{
+#content div {
   font-family: 'Roboto', sans-serif;
   font-size: 50px;
   text-align: center;
@@ -149,7 +143,32 @@ th {
 }
 
 /* for the government page only */
-#govButton
-{
+#govButton {
   width: 33% !important;
+}
+
+/* for all form things*/
+#form {
+  z-index: 1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+#formData {
+  position: absolute;
+  width: auto;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+  background-color: gray;
+  font-family: 'Open Sans', sans-serif;
+  border-style: solid;
+  border-width: 5px;
+  border-color: darkgray;
 }

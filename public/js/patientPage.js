@@ -32,23 +32,47 @@ function personalizePage() {
     }
 }
 
-function changeInsuranceInformation()
-{
+function changeInsuranceInformation() {
     alert("Will be added during next production sprint")
 }
 
-function changeAddressInformation()
-{
+function changeAddressInformation() {
     alert("Will be added during next production sprint")
 }
 
-function changeBillingInformation()
-{
-    alert("Will be added during next production sprint")
+function changeBillingType() {
+    if (document.getElementById("billingType").value == "cash") {
+        document.getElementById("billingCash").style.display = "block";
+        document.getElementById("billingCard").style.display = "none";
+    } else {
+        document.getElementById("billingCash").style.display = "none";
+        document.getElementById("billingCard").style.display = "block";
+    }
 }
 
-function payOutstandingInvoice(index)
-{
+function updateBillingInformation() {
+    if (document.getElementById("billingType").value == "cash") {
+        //check if accepted
+        if (document.getElementById("consentYes").checked) {
+            //then let it go
+            alert("The information is being processed by the associated bank or hospital.")
+            document.getElementById("form").style.display = "none";
+        } else {
+            alert("You must consent to use cash payment type.");
+        }
+    } else {
+        if (document.getElementById("cardNumber").value.length != 16 || document.getElementById("cvv").value.length != 3 || document.getElementById("expirationDate").value.length != 7) {
+            alert("You must fill out all information properly.");
+        } else {
+            //then let it go
+            alert("The information is being processed by the associated bank or hospital.")
+            document.getElementById("form").style.display = "none";
+        }
+    }
+
+}
+
+function payOutstandingInvoice(index) {
     $.post("/pay_invoice", {
         foo: index
     }, function (data, status, xhr) {
