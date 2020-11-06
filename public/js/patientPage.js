@@ -85,13 +85,17 @@ function payOutstandingInvoice(index) {
     });
 }
 
+function requestInvoiceRefund(index){
+    alert("Request for refund has been sent to the associated insurance worker.");
+}
+
 function generateInvoiceTable() {
     if (database.Invoice.length > 0) {
         var outputHtml = "<div class='Table'> <table> <tr>";
         for (var i = 0; i < database.Invoice[0].length; i++) {
             outputHtml += "<th>" + database.Invoice[0][i].metadata.colName + "</th>";
         }
-        outputHtml += "<th>Pay</th></tr>";
+        outputHtml += "<th>Pay</th><th>Refund</th></tr>";
         //iterate through the User table
         for (var i = 0; i < database.Invoice.length; i++) {
             // for each row (unique user)
@@ -100,7 +104,7 @@ function generateInvoiceTable() {
                 // for each data point
                 outputHtml += "<td>" + database.Invoice[i][j].value + "</td>";
             }
-            outputHtml += '<th><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></th></tr>';
+            outputHtml += '<th><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></th><th><button type="button" onclick="requestInvoiceRefund(' + i + ')" >Request Refund</button></th></tr>';
         }
         outputHtml += "</table> </div>";
         //add it to the div

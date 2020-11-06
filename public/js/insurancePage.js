@@ -16,6 +16,7 @@ function requestDatabaseInformationReadOnly() {
         personalizePage();
         generatePlanTable();
         generateInvoiceTable();
+        generateRefundTable();
     });
 }
 
@@ -28,8 +29,7 @@ function personalizePage() {
     document.getElementById("insuranceInfo").innerHTML += database.Patient.length + "<br>Patient(s) using insurance plans";
 }
 
-function payOutstandingInvoice(index)
-{
+function payOutstandingInvoice(index) {
     $.post("/pay_insurance", {
         foo: index
     }, function (data, status, xhr) {
@@ -40,6 +40,10 @@ function payOutstandingInvoice(index)
             alert(data);
         }
     });
+}
+
+function acceptOutstandingRefund(index) {
+    alert("Refund has been accepted, will begin bank processing.");
 }
 
 function generatePlanTable() {
@@ -85,5 +89,28 @@ function generateInvoiceTable() {
         outputHtml += "</table> </div>";
         //add it to the div
         document.getElementById("invoiceTable").innerHTML += outputHtml;
+    }
+}
+
+function generateRefundTable() {
+    if (database.Refund.length > 0) {
+        var outputHtml = "<div class='Table'> <table> <tr>";
+        for (var i = 0; i < database.Refund[0].length; i++) {
+            outputHtml += "<th>" + database.Refund[0][i].metadata.colName + "</th>";
+        }
+        outputHtml += "<th>Pay</th></tr>";
+        //iterate through the User table
+        for (var i = 0; i < database.Refund.length; i++) {
+            // for each row (unique user)
+            outputHtml += "<tr>";
+            for (var j = 0; j < database.Refund[i].length; j++) {
+                // for each data point
+                outputHtml += "<td>" + database.Refund[i][j].value + "</td>";
+            }
+            outputHtml += '<th><button type="button" onclick="acceptOutstandingRefund(' + i + ')" >Accept Refund</button></th></tr>';
+        }
+        outputHtml += "</table> </div>";
+        //add it to the div
+        document.getElementById("refundTable").innerHTML += outputHtml;
     }
 }

@@ -240,10 +240,14 @@ app.get('/insurance_page', function (req, res) {
                         }
                         patientList += "'" + database.Patient[i][0].value + "'";
                     }
-                    requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor, DateIssued, (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, OutstandingBalance FROM Invoice WHERE PatientId IN ("+patientList+") AND IsPaidByInsurance = 0 ORDER BY DateIssued;", function (err, rowCount, rows) {
+                    requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor, DateIssued, (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, OutstandingBalance FROM Invoice WHERE PatientId IN (" + patientList + ") AND IsPaidByInsurance = 0 ORDER BY DateIssued;", function (err, rowCount, rows) {
                         database.Invoice = rows;
-                        //now send it to the website
-                        res.send(database)
+                        requestRefund = new tedious.Request("SELECT * FROM Refund WHERE PatientId IN (" + patientList + ") ORDER BY DateIssued;", function (err, rowCount, rows) {
+                            database.Refund = rows;
+                            //now send it to the website
+                            res.send(database)
+                        });
+                        connection.execSql(requestRefund);
                     });
                     connection.execSql(requestInvoice);
                 });
@@ -292,7 +296,7 @@ app.get('/doctor_page', function (req, res) {
                                 }
                                 docList += "'" + rows[i][0].value + "'";
                             }
-                            requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ("+docList+") ORDER BY DateIssued;", function (err, rowCount, rows) {
+                            requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN (" + docList + ") ORDER BY DateIssued;", function (err, rowCount, rows) {
                                 database.Invoice = rows;
                                 //now send that stuff
                                 res.send(database)
@@ -310,7 +314,7 @@ app.get('/doctor_page', function (req, res) {
                                 }
                                 docList += "'" + rows[i][0].value + "'";
                             }
-                            requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ("+docList+") ORDER BY DateIssued;", function (err, rowCount, rows) {
+                            requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN (" + docList + ") ORDER BY DateIssued;", function (err, rowCount, rows) {
                                 database.Invoice = rows;
                                 //now send that stuff
                                 res.send(database)
@@ -320,7 +324,7 @@ app.get('/doctor_page', function (req, res) {
                         connection.execSql(requestList);
                         break;
                     case 2:
-                        requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ('"+docKey+"') ORDER BY DateIssued;", function (err, rowCount, rows) {
+                        requestInvoice = new tedious.Request("SELECT (SELECT FirstName + ' ' +  LastName FROM Patient WHERE PatientId = Invoice.PatientId) AS Patient, (SELECT FirstName + ' ' +  LastName FROM Doctor WHERE DoctorId = Invoice.DoctorId) AS Doctor,  (SELECT Description FROM Treatment WHERE TreatmentId = Invoice.TreatmentId) AS Treatment, (SELECT Description FROM Drug WHERE DrugId = Invoice.DrugId) AS Drug, IsPaidByInsurance, IsPaidByPatient FROM Invoice WHERE DoctorId IN ('" + docKey + "') ORDER BY DateIssued;", function (err, rowCount, rows) {
                             database.Invoice = rows;
                             //now send that stuff
                             res.send(database)
