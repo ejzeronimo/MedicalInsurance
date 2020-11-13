@@ -11,7 +11,7 @@
 </head>
 
 <body onload="requestDatabaseInformationReadOnly()">
-    <div id="form" style="display:none;">
+    <div id="formBilling" class="form" style="display:none;">
         <div id="formData">
             <div id="loginText">Edit Billing Information:</div>
             <label>Payment Type:</label><br>
@@ -37,13 +37,28 @@
             <input type="button" value="Submit" onclick="updateBillingInformation()">
         </div>
     </div>
+    <div id="formHelp" class="form" style="display:none;">
+        <div id="formData">
+            <div id="loginText">Payment Help Form:</div>
+            <label>Select Invoice:</label><br>
+            <select id="selectedInvoice">
+            </select><br>
+            <label>What is the nature of the help?</label><br>
+            <select id="selectedHelp">
+                <option value="0">I would like to request a refund</option>
+                <option value="1">There is a problem with the amount specified</option>
+            </select><br>
+            <input type="button" value="Submit" onclick="sendHelpRequest()">
+        </div>
+    </div>
     <div id="topbar">
         <div id="userInfo"><b>Welcome:</b><br></div>
         <div id="outstandingBills"></div>
         <div id="insuranceInfo"></div>
         <div id="contactInfo"></div>
+        <button id="help" type="button" onclick="document.getElementById('formHelp').style.display = 'block'">Help/Error</button>
         <div id="buttonContainer">
-            <button type="button" onclick="document.getElementById('form').style.display = 'block'">Change Billing</button>
+            <button type="button" onclick="document.getElementById('formBilling').style.display = 'block'">Change Billing</button>
             <button type="button" onclick="changeAddressInformation()">Change Address</button>
             <button type="button" onclick="changeInsuranceInformation()">Change Insurance</button>
             <button type="button" onclick="location.reload()">Refresh</button>

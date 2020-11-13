@@ -76,6 +76,17 @@ body {
   width: auto;
 }
 
+#help {
+  margin-top: .5%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  padding-right: 0.5%;
+  font-size: 15px;
+  float: left;
+  height: 80%;
+  width: 10%;
+}
+
 #buttonContainer button {
   padding: 0%;
   font-size: 15px;
@@ -148,7 +159,7 @@ th {
 }
 
 /* for all form things*/
-#form {
+.form {
   z-index: 1;
   position: absolute;
   top: 0px;

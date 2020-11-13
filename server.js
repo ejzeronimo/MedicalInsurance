@@ -6,7 +6,8 @@ var CryptoJS = require("crypto-js");
 
 //////////////////////////////////////////////////////////////////////////////// SQL CONFIGS AND CONNECTION
 var config = {
-    server: '172.16.17.117',
+    server: 'localhost',
+    //server: '172.16.17.117',
     authentication: {
         type: 'default',
         options: {

@@ -85,8 +85,19 @@ function payOutstandingInvoice(index) {
     });
 }
 
-function requestInvoiceRefund(index){
-    alert("Request for refund has been sent to the associated insurance worker.");
+function sendHelpRequest() {
+    document.getElementById('formHelp').style.display = 'none';
+    //get that index
+    var index = document.getElementById("selectedInvoice").value;
+    ///
+    switch (document.getElementById("selectedHelp").value) {
+        case "0":
+            alert("The refund has been requested.");
+            break;
+        case "1":
+            alert("They payment balance is being sent to the corresponding insurance to be recalculated.");
+            break;
+    }
 }
 
 function generateInvoiceTable() {
@@ -95,7 +106,7 @@ function generateInvoiceTable() {
         for (var i = 0; i < database.Invoice[0].length; i++) {
             outputHtml += "<th>" + database.Invoice[0][i].metadata.colName + "</th>";
         }
-        outputHtml += "<th>Pay</th><th>Refund</th></tr>";
+        outputHtml += "<th>Pay</th></tr>";
         //iterate through the User table
         for (var i = 0; i < database.Invoice.length; i++) {
             // for each row (unique user)
@@ -104,10 +115,17 @@ function generateInvoiceTable() {
                 // for each data point
                 outputHtml += "<td>" + database.Invoice[i][j].value + "</td>";
             }
-            outputHtml += '<th><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></th><th><button type="button" onclick="requestInvoiceRefund(' + i + ')" >Request Refund</button></th></tr>';
+            outputHtml += '<th><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></th></tr>';
         }
         outputHtml += "</table> </div>";
         //add it to the div
         document.getElementById("invoiceTable").innerHTML = outputHtml;
+        //now we add it to the help page
+        dropHtml = "";
+        //iterate through the User table
+        for (var i = 0; i < database.Invoice.length; i++) {
+            dropHtml += '<option value="' + i + '">' + database.Invoice[i][0].value + " - " + database.Invoice[i][1].value + " - $" + database.Invoice[i][4].value + "</option>";
+        }
+        document.getElementById("selectedInvoice").innerHTML += dropHtml;
     }
 }
