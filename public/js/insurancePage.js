@@ -24,7 +24,7 @@ function personalizePage() {
     //make the welcome text say the name of the firm
     document.getElementById("userInfo").innerHTML += database.Firm[0][1].value;
     //now get the address of the user
-    document.getElementById("contactInfo").innerHTML += database.Contact[0][1].value + " " + database.Contact[0][2].value + ",<br>" + database.Contact[0][3].value + " " + database.Contact[0][4].value + "<br> Phone: " + database.Contact[0][5].value + "<br> Email: " + database.Contact[0][6].value;
+    document.getElementById("contactInfo").innerHTML += "<div style='float:right;margin-left:15px;'>" + database.Contact[0][1].value + "<br>" + database.Contact[0][2].value + "," + database.Contact[0][3].value + " " + database.Contact[0][4].value + "</div><div style='float:left;'> Phone: " + database.Contact[0][5].value + "<br> Email: " + database.Contact[0][6].value  + "</div>";
     //set insurance to none if the id is null
     document.getElementById("insuranceInfo").innerHTML += database.Patient.length + "<br>Patient(s) using insurance plans";
 }
@@ -84,7 +84,7 @@ function generateInvoiceTable() {
                 // for each data point
                 outputHtml += "<td>" + database.Invoice[i][j].value + "</td>";
             }
-            outputHtml += '<th><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></th></tr>';
+            outputHtml += '<td><button type="button" onclick="payOutstandingInvoice(' + i + ')" >Pay Invoice</button></td></tr>';
         }
         outputHtml += "</table> </div>";
         //add it to the div
@@ -107,7 +107,7 @@ function generateRefundTable() {
                 // for each data point
                 outputHtml += "<td>" + database.Refund[i][j].value + "</td>";
             }
-            outputHtml += '<th><button type="button" onclick="acceptOutstandingRefund(' + i + ')" >Accept Refund</button></th></tr>';
+            outputHtml += '<td><button type="button" onclick="acceptOutstandingRefund(' + i + ')" >Accept Refund</button></td></tr>';
         }
         outputHtml += "</table> </div>";
         //add it to the div

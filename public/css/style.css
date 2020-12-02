@@ -1,162 +1,272 @@
 body {
-  background-image: linear-gradient(navy, lightblue);
+  background-image: linear-gradient(#6F7EE8,#86C5FF);
   color: white;
-  font-family: 'Open Sans', sans-serif;
+  font-family: Monaco, monospace;
+  margin: 0px;
 }
 
-/* login panel only */
-#loginPanel {
-  font-family: 'Open Sans', sans-serif;
-  border-style: solid;
-  border-width: 5px;
-  border-color: darkgray;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: gray;
-  width: 400px;
-  height: 200px;
-  text-align: center;
-}
-
-#loginText {
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-  font-size: 30px;
-}
-
-/* for every single top panel */
-#userInfo {
-  font-family: 'Roboto', sans-serif;
-  font-size: 30px;
-  padding-top: 1%;
-  padding-left: 1%;
-  height: auto;
-  width: auto;
-}
-
-#outstandingBills {
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
-  font-size: 40px;
-  padding-top: 1%;
-  height: auto;
-  width: auto;
-  flex-grow: 2;
-}
-
-#insuranceInfo {
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-  font-size: 15px;
-  padding-top: 1.5%;
-  padding-right: 1%;
-  height: auto;
-  width: auto;
-}
-
-#contactInfo {
-  font-family: 'Roboto', sans-serif;
-  font-size: 15px;
-  padding-top: 1.5%;
-  padding-right: 1%;
-  height: auto;
-  width: auto;
-}
-
-#buttonContainer {
-  font-family: 'Roboto', sans-serif;
-  font-size: 30px;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-  padding-right: 0.5%;
-  height: auto;
-  width: auto;
-}
-
-#help {
-  margin-top: .5%;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-  padding-right: 0.5%;
-  font-size: 15px;
-  float: left;
-  height: 80%;
-  width: 10%;
-}
-
-#buttonContainer button {
-  padding: 0%;
-  font-size: 15px;
-  float: left;
-  height: 50%;
-  width: 50%;
-}
-
-#buttonContainer input {
-  padding: 0%;
-  font-size: 15px;
-  float: left;
-  height: 50%;
-  width: 33%;
-}
-
-
-#topbar {
-  position: absolute;
+/* Top caution bar */
+#cautionBar {
+  position: sticky;
   top: 0px;
   left: 0px;
+  width: 100%;
+  height: 30px;
+  font-family: Arial Black; 
+  background-image: linear-gradient(135deg, #000000 25%, #ffee00 25%, #ffee00 50%, #000000 50%, #000000 75%, #ffee00 75%, #ffee00 100%);
+  background-size: 42.43px 42.43px;
+  box-shadow: 0px 0px 5px black inset;
+}
+#cautionBar div {
+  position: relative;
+  width: fit-content;
+  height: 28px;
+  left: 50%;
+  transform: translate(-50%,0%);
+  padding-top: 2px;
+  padding-left: 30px;
+  padding-right: 30px;
+  background-color: #ffee00;
+  color: #000000;
+  box-shadow: 0px 0px 5px black inset;
+  clip-path: polygon(28px 0, 100% 0, 600px 100%, 0 100%);
+  font-size: 18px;
+}
+/* The top bar on each page */
+.topbar {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  height: 60px;
+  width: 100%;
   border-style: solid;
   border-width: 0px;
   border-bottom-width: 5px;
   border-color: darkgray;
   background-color: gray;
-  height: 10%;
-  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
-
+#userInfo {
+  position: relative;
+  float: right;
+  margin-left: 15px;
+  font-size: 30px;
+  line-height: 60px;
+  height: 60px;
+  width: auto;
+}
+#insuranceInfo {
+  position: relative;
+  margin-left: 15px;
+  margin-top: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  height: 50px;
+  width: auto;
+}
+#contactInfo {
+  position: relative;
+  margin-left: 15px;
+  margin-top: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  height: 50px;
+  width: auto;
+}
+#buttonContainer {
+  position: relative;
+  margin-left: auto;
+  right: 0px;
+  height: 100%;
+}
+#buttonContainer button{
+  color: gray;
+  font-family: Monaco, monospace;
+  margin: 0px;
+  margin-left: 5px;
+  border-width: 0px;
+  float: right;
+  height: 100%;
+}
+#buttonContainer button:hover{
+  color: white;
+  background-color: gray;
+}
+#buttonContainer input {
+  position: relative;
+  top: 50%;
+  transform: translate(0%,-50%);
+}
 /* for every single content panel */
 #content {
-  top: 12%;
+  top: 140px;
   left: 0px;
   position: fixed;
   width: 100%;
-
 }
-
 #content div {
-  font-family: 'Roboto', sans-serif;
   font-size: 50px;
   text-align: center;
   margin: 0 auto;
   width: fit-content;
   height: auto;
 }
-
-table,
-th,
-td {
+table{
+  border-radius: 15px;
   padding: 5px;
   background-color: gray;
   text-align: center;
   border: 5px solid darkgray;
-  border-collapse: collapse;
+  border-radius: 15px;
+  
 }
-
-th {
-  font-family: 'Roboto', sans-serif;
+th{
+  font-size: 30px;
+  border-bottom: 5px solid darkgray;
+}
+td {
+  padding: 5px;
+  text-align: center;
+}
+table button{
+  font-size: 15px;
+  border: 0px;
+  font-family: Monaco, monospace;
+  color: gray;
+}
+table button:hover{
+  color: white;
+  background-color: gray;
+}
+/* login window only */
+.loginPanel {
+  position: relative;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 15px;
+  border-style: solid;
+  border-width: 5px;
+  border-color: darkgray;
+  margin: 0;
+  background-color: gray;
+  width: 350px;
+  height: fit-content;
+  text-align: center;
+}
+.loginText {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  line-height: 32px;
+  width: 338px;
+  white-space: nowrap;
+  height: 64px;
+  margin: 5px;
+  text-align: left;
   font-size: 30px;
 }
-
-/* for the government page only */
-#govButton {
-  width: 33% !important;
+.loginForm {
+  font-size: 20px;
+  margin: 5px;
+  text-align: left;
 }
+.loginForm input[type=text] {
+  font-family: Monaco, monospace;
+  font-size: 20px;
+  color: white;
+  height: 45px;
+  width: 100%;
+  border: none;
+  background-color: gray;
+  border-bottom: 4px solid white;
+}
+.loginForm input[type=button] {
+  font-family: Monaco, monospace;
+  font-size: 20px;
+  color: white;
+  height: 45px;
+  width: 100%;
+  background-color: gray;
+  border: 4px solid white;
+  border-radius: 8px;
+}
+.loginForm input:hover {
+  background-color: darkgray;
+}
+/* For the Patient window only*/
+.billingForm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: gray;
+  border-radius: 15px;
+  border-style: solid;
+  border-width: 5px;
+  border-color: darkgray;
+  width: 500px;
+}
+.billingText {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  line-height: 32px;
+  width: auto;
+  height: auto;
+  margin: 5px;
+  text-align: center;
+  font-size: 30px;
+}
+.billingLabel {
+  margin-left: 5px;
+  font-size: 20px;
+}
+#billingType {
+  font-family: Monaco, monospace;
+  font-size: 18px;
+  text-align: center;
+  position: relative;
+  left: 5px;
+  height: 30px;
+  width: 40%;
+}
+.billingForm input[type=button] {
+  position: relative;
+  left: 50%;
+  margin-bottom: 10px;
+  transform: translate(-50%, 0%);
+  font-family: Monaco, monospace;
+  font-size: 20px;
+  color: white;
+  height: 45px;
+  width: auto;
+  background-color: gray;
+  border: 4px solid white;
+  border-radius: 8px;
+}
+.billingForm input[type=button]:hover {
+  background-color: darkgray;
+}
+.billingOption {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 80%;
+  left: 50%;
+  transform: translate(-50%,0%);
+  border-style: solid;
+  border-left: 0px;
+  border-right: 0px;
+  border-width: 5px;
+  border-color: darkgray;
+}
+
+
 
 /* for all form things*/
 .form {

@@ -23,7 +23,7 @@ function requestDatabaseInformationReadOnly() {
 
 function personalizePage() {
     //change the welcome text to show the amount of treatments and drugs
-    document.getElementById("userInfo").innerHTML += database.Drug.length + " Government standardized drugs<br>" + database.Treatment.length + " Government standardized treatments";
+    document.getElementById("insuranceInfo").innerHTML += database.Drug.length + " Government standardized drugs<br>" + database.Treatment.length + " Government standardized treatments";
 }
 
 function generateTreatmentTable() {

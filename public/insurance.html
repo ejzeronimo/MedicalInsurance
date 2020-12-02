@@ -12,11 +12,20 @@
 </head>
 
 <body onload="requestDatabaseInformationReadOnly()">
-    <div id="topbar">
-        <div id="userInfo"><b>Welcome:</b><br></div>
-        <div id="outstandingBills"></div>
+    <!-- This is the topbar added for more official flare -->
+    <div id="cautionBar">
+        <div><b>The website is in read only mode, fill out the survey <a
+                    href="https://purdue.ca1.qualtrics.com/jfe/form/SV_1Ybkfvjbtq0qeoZ" target="_blank">here</a>!</b>
+        </div>
+    </div>
+    <!-- This is the topbar added for basic information -->
+    <div class="topbar">
+        <div id="userInfo"><b>Welcome: </b></div>
         <div id="insuranceInfo"></div>
         <div id="contactInfo"></div>
+        <div id="buttonContainer">
+            <button onclick="location.reload()">Refresh</button>
+        </div>
     </div>
     <div id="content">
         <div id="planTable">

@@ -6,8 +6,8 @@ var CryptoJS = require("crypto-js");
 
 //////////////////////////////////////////////////////////////////////////////// SQL CONFIGS AND CONNECTION
 var config = {
-    server: 'localhost',
-    //server: '172.16.17.117',
+    //server: 'localhost',
+    server: '172.16.17.117',
     authentication: {
         type: 'default',
         options: {
@@ -78,7 +78,7 @@ app.post('/login_request', function (req, res) {
                                     res.send("/doctor?userKey=" + rows[0][0].value);
                                 } else {
                                     //now go back
-                                    res.send("/");
+                                    res.send("/?failed=true");
                                 }
                             });
                             connection.execSql(requestDoctor);
