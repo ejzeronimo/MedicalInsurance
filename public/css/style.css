@@ -120,13 +120,14 @@ body {
   left: 0px;
   position: fixed;
   width: 100%;
+  height: calc(100vh - 140px);
+  overflow: auto;
 }
 #content div {
   font-size: 50px;
   text-align: center;
   margin: 0 auto;
   width: fit-content;
-  height: auto;
 }
 table{
   border-radius: 15px;
