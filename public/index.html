@@ -14,12 +14,15 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     </head>
 
-    <body onload="onload()">
+    <body onload="onload()" >
         <!-- This is the topbar added for more official flare -->
-        <div id="cautionBar">
+        <div id="readOnly" class="cautionBar" style="display:none;">
             <div><b>The website is in read only mode, fill out the survey <a
                         href="https://purdue.ca1.qualtrics.com/jfe/form/SV_1Ybkfvjbtq0qeoZ"
                         target="_blank">here</a>!</b></div>
+        </div>
+        <div id="writeOnly" class="cautionBar" style="display:none;">
+            <div><b>Warning, the website is fully active, all functions available!</b></div>
         </div>
         <!-- The class that centers and holds login information -->
         <div class="loginPanel">

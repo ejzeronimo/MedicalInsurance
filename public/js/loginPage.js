@@ -5,9 +5,15 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 function onload() {
+    $.post("/read_only", null, function (data, status, xhr) {
+        if (data) {
+            document.getElementById("readOnly").style.display = "block";
+        } else {
+            document.getElementById("writeOnly").style.display = "block";
+        }
+    });
     var queryString = window.location.search.replace("?failed=", "");
-    if (queryString == "true")
-    {
+    if (queryString == "true") {
         document.getElementById("error").style.display = "block";
     }
 }

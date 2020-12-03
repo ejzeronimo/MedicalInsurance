@@ -1,136 +1,27 @@
-/****** Script for SelectTopNRows command from SSMS  *****
-SELECT * FROM Users
+------------------CREATE INSURANCE
+INSERT INTO Contact (ContactId,Address,City,State,Zipcode,PhoneNumber,EmailAddress)
+VALUES (NEWID(),'610 Purdue Mall','West Lafayette','IN','47907','7654944600','purdue@campus.edu');
 
-CREATE TABLE Hospitals (
-    HospitalId uniqueidentifier NOT NULL PRIMARY KEY,
-    HospitalName varchar(60),
-    Address varchar(255),
-    City varchar(255),
-);
+INSERT INTO Insurance_Company(InsuranceCompanyId,FirmName, UserName,Password,ContactId)
+VALUES ( NEWID() ,'Heckler & Heckler', 'heckledjr','&heckledsr','5D8B8F19-7A75-4F6A-ACC7-4C677F504FFA');
 
+NSERT INTO Insurance_Plan(PlanName,PlanId,InsuranceCompanyId, MinimumCharge,TreatmentCoverageRate,DrugCoverageRate)
+VALUES ('Less for More' ,NEWID() ,'BCB69AC7-4D1B-4FBC-B0BE-A754B873ACD2	', 150, .20,.5);
 
-INSERT INTO Hospitals (HospitalId,HospitalName, Address, City)
-VALUES ( NEWID() ,'Name', '75 North King Street Goose Creek', 'SC'),
-( NEWID() ,'Name', '7024 Thatcher Ave. Grand Island', 'NE'),
-( NEWID() ,'Name', '9036 Corona St. Mchenry', 'IL'),
-( NEWID() ,'Name', '62 Sulphur Springs Ave. Hopewell', 'VA'),
-( NEWID() ,'Name', '103 Indian Summer Street Harlingen', 'TX');
-
-
-UPDATE Hospitals
-SET HospitalName = 'Grand Island Emergency Center'
-WHERE HospitalId = '293DB398-0DB4-4ADD-B183-EFE7CF1F75D2';
-
-ALTER TABLE Users
-ADD userCurrentHospitalEmployerId uniqueidentifier FOREIGN KEY REFERENCES Hospitals(HospitalId);
-
-CREATE TABLE InsuranceFirms (
-    InsuranceId uniqueidentifier NOT NULL PRIMARY KEY,
-    FirmName varchar(60),
-    City varchar(255),
-);
-
-INSERT INTO InsuranceFirms (InsuranceId,FirmName, City)
-VALUES ( NEWID() ,'Heckler & Heckler', 'AL'),
-( NEWID() ,'AAAA Firms', 'IN'),
-( NEWID() ,'Regressive Insurance',  'KA');
-
-ALTER TABLE Users
-ADD userCurrentInsuranceEmployerId uniqueidentifier FOREIGN KEY REFERENCES InsuranceFirms(InsuranceId);
-
-INSERT INTO Users (UserId,UserName, AccessLevel, Passkey,userCurrentInsuranceEmployerId)
-VALUES ( NEWID() ,'PayForItAllPatient', '4', 'dontneednohelp' ,'85A60431-0E3B-4674-9DC7-88F74C3E4134');
-
-CREATE TABLE Treatments (
-    TreatmentId uniqueidentifier NOT NULL PRIMARY KEY,
-    Description varchar(255),
-    StandardPrice int,
-);
-INSERT INTO Treatments (TreatmentId,Description, StandardPrice)
-VALUES ( NEWID() ,'Partial Body Xray', 150);
-
-CREATE TABLE Invoices (
-    treatmentId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Treatments(TreatmentId),
-	hospitalId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Hospitals(HospitalId),
-    patientId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
-	proctorId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
-    insuranceId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES InsuranceFirms(InsuranceId),
-	IsPaidByInsurance bit,
-	IsPaidByPatient bit,
-	PatientPaymentAmount int
-);
-
-CREATE TABLE InsurancePlans (
-	PlanId uniqueidentifier NOT NULL PRIMARY KEY,
-    insuranceProviderId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES InsuranceFirms(InsuranceId),
-	MinimumCharge int,
-	CoverageRate float
-);
-
-ALTER TABLE Users
-ADD userCurrentInsurancePlan uniqueidentifier FOREIGN KEY REFERENCES InsurancePlans(PlanId);
-
-ALTER TABLE InsurancePlans
-ADD PlanName varchar(100);
-
-INSERT INTO InsurancePlans (PlanName,PlanId,insuranceProviderId, MinimumCharge,CoverageRate)
-VALUES ('Less for More' ,NEWID() ,'B11785C2-737A-4636-94D3-4D78D03ECDD5', 150, .20);
-
-INSERT INTO Treatments (TreatmentId,Description, StandardPrice)
-VALUES ( NEWID() ,'Partial Body Xray', 150),( NEWID() ,'Broken ankle cast', 75),
-(NEWID(), 'Fever medication', 20);
-
-INSERT INTO Invoices (treatmentId,hospitalId,patientId, proctorId,insuranceId, IsPaidByInsurance, IsPaidByPatient, PatientPaymentAmount)
-VALUES ('AA270236-3A38-4512-85D3-FE991C3329CC' ,'2169A4FE-6011-4791-BD2A-43807D71B963' ,'62D754B3-D162-4BF7-93EB-0C648B44AF7A', '38943B1F-617E-459D-942E-99E30AB9B599', '');
-
-CREATE TABLE Invoices (
-    treatmentId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Treatments(TreatmentId),
-	hospitalId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Hospitals(HospitalId),
-    patientId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
-	proctorId uniqueidentifier NOT NULL FOREIGN KEY REFERENCES Users(UserId),
-	IsPaidByInsurance bit,
-	IsPaidByPatient bit,
-	PatientPaymentAmount int
-);
-
-INSERT INTO Invoices (treatmentId,hospitalId,patientId, proctorId, IsPaidByInsurance, IsPaidByPatient, PatientPaymentAmount)
-VALUES ('AA270236-3A38-4512-85D3-FE991C3329CC' ,'2169A4FE-6011-4791-BD2A-43807D71B963' ,'62D754B3-D162-4BF7-93EB-0C648B44AF7A', '38943B1F-617E-459D-942E-99E30AB9B599', 0,0,0);
-*/
-
-/*
-
-
-INSERT INTO Contact (ContactId)
-VALUES (NEWID());
-
-VALUES (NEWID(), 'testpatient', 'testpassword', 'John', 'Doe', );
-
-
-INSERT INTO Patient (patientId,UserName,Password, FirstName, LastName, ContactId)
-VALUES (NEWID(), 'testpatient', 'testpassword', 'John', 'Doe','D2481B35-E280-48AB-B213-E741096CDA70');
-
-SELECT 
-    TABLE_NAME
-FROM
-    information_schema.tables;
-*/
-
-/*
-INSERT INTO Doctor (DoctorId)
-VALUES (NEWID());
-SELECT CONVERT (date, GETDATE())
-
-INSERT INTO Invoice (PatientId, DoctorId, DateIssued)
-VALUES ('D369D022-DB38-4C0C-90C8-49140C87ADE4','AE10C12F-DA6C-4684-B20A-D26540F4D0A9',CONVERT (date, GETDATE()));
-*/
-
-INSERT INTO Government_Official(GovOfficialId)
-VALUES (NEWID());
-
-
+------------------CREATE Doctor
 INSERT INTO Contact (ContactId,Address,City,State,Zipcode,PhoneNumber,EmailAddress)
 VALUES (NEWID(),'610 Purdue Mall','West Lafayette','IN','47907','7654944600','purdue@campus.edu');
 
 
-INSERT INTO Patient (patientId,UserName,Password, FirstName, LastName, ContactId)
+
+------------------CREATE USER
+INSERT INTO Contact (ContactId,Address,City,State,Zipcode,PhoneNumber,EmailAddress)
+VALUES (NEWID(),'610 Purdue Mall','West Lafayette','IN','47907','7654944600','purdue@campus.edu');
+
+INSERT INTO Patient (PatientId,UserName,Password,FirstName,LastName,ContactId,PlanId)
 VALUES (NEWID(), 'surveypatient', 'password1234', 'Survey', 'Taker','C9F7ACEA-9C8A-48DD-A11A-5FA5F541685A');
+
+INSERT INTO Billing_Information (BillingId, CreditCardNumber,CredCardExpiractionDate, CreditCardCVV,PatientId,BankId, isCashPay ) 
+VALUES (NEWID(),'','','','D369D022-DB38-4C0C-90C8-49140C87ADE4','E185FBCA-BCAB-4223-855B-1F29BF5147B2',1);
+
+

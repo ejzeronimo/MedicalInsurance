@@ -8,17 +8,30 @@ var database = {};
 var govKey;
 
 function requestDatabaseInformationReadOnly() {
+    $.post("/read_only", null, function (data, status, xhr) {
+        if (data) {
+            document.getElementById("readOnly").style.display = "block";
+        } else {
+            document.getElementById("writeOnly").style.display = "block";
+        }
+    });
     govKey = window.location.search.replace("?userKey=", "");
 
     $.get("/government_page?userKey=" + encodeURIComponent(govKey), function (data, status) {
         database = data;
-        console.log(database);
-
         //load the topbar with all needed information
         personalizePage();
         generateTreatmentTable();
         generateDrugTable();
     });
+
+    var input = document.getElementById('description'); // get the input element
+    input.addEventListener('input', resizeInput); // bind the "resizeInput" callback on "input" event
+    resizeInput.call(input); // immediately call the function
+
+    function resizeInput() {
+        this.style.width = this.value.length + "ch";
+    }
 }
 
 function personalizePage() {
@@ -73,33 +86,37 @@ function generateDrugTable() {
 }
 
 function addTreatmentToSystem() {
-    //just add the info
-    $.post("/add_treatment", {
-        description: document.getElementById("treatmentDescription").value,
-        price: document.getElementById("treatmentPrice").value,
-        govId: govKey
-    }, function (data, status, xhr) {
-        if (Object.keys(data).length == 0) {
-            alert("The treatment has been added to the database correctly!");
-            location.reload();
-        } else {
-            alert(data);
-        }
-    });
+    if (confirm("You are going to add this entry as a treatment, confirm?")) {
+        //just add the info
+        $.post("/add_treatment", {
+            description: document.getElementById("description").value,
+            price: document.getElementById("price").value,
+            govId: govKey
+        }, function (data, status, xhr) {
+            if (Object.keys(data).length == 0) {
+                alert("The treatment has been sent to the database correctly!");
+                location.reload();
+            } else {
+                alert(data);
+            }
+        });
+    }
 }
 
 function addDrugToSystem() {
-    //just add the info
-    $.post("/add_drug", {
-        description: document.getElementById("drugDescription").value,
-        price: document.getElementById("drugPrice").value,
-        govId: govKey
-    }, function (data, status, xhr) {
-        if (Object.keys(data).length == 0) {
-            alert("The drug has been added to the database correctly!");
-            location.reload();
-        } else {
-            alert(data);
-        }
-    });
+    if (confirm("You are going to add this entry as a drug, confirm?")) {
+        //just add the info
+        $.post("/add_drug", {
+            description: document.getElementById("description").value,
+            price: document.getElementById("price").value,
+            govId: govKey
+        }, function (data, status, xhr) {
+            if (Object.keys(data).length == 0) {
+                alert("The drug has been sent to the database correctly!");
+                location.reload();
+            } else {
+                alert(data);
+            }
+        });
+    }
 }

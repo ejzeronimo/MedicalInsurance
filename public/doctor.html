@@ -3,21 +3,24 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Doctor Overview Page</title>
+        <title>M.E.D.I.C.S Doctor Page</title>
+        <link rel="icon" href="/icon.png" type="image/gif" sizes="16x16">
         <link rel="stylesheet" type="text/css" href="/css/style.css">
         <script type="text/javascript" src="/js/doctorPage.js"></script>
-
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     </head>
 
     <body onload="requestDatabaseInformationReadOnly()">
         <!-- This is the topbar added for more official flare -->
-    <div id="cautionBar">
-        <div><b>The website is in read only mode, fill out the survey <a
-                    href="https://purdue.ca1.qualtrics.com/jfe/form/SV_1Ybkfvjbtq0qeoZ" target="_blank">here</a>!</b>
+        <div id="readOnly" class="cautionBar" style="display:none;">
+            <div><b>The website is in read only mode, fill out the survey <a
+                        href="https://purdue.ca1.qualtrics.com/jfe/form/SV_1Ybkfvjbtq0qeoZ"
+                        target="_blank">here</a>!</b></div>
         </div>
-    </div>
+        <div id="writeOnly" class="cautionBar" style="display:none;">
+            <div><b>Warning, the website is fully active, all functions available!</b></div>
+        </div>
         <!-- This is the topbar added for basic information -->
         <div class="topbar">
             <div id="userInfo"><b>Welcome: </b></div>
@@ -39,9 +42,12 @@
                             <th>Submit</th>
                         </tr>
                         <tr>
-                            <td><input type="text" id="" name="description" value="PatientID"></td>
-                            <td><input type="text" id="" name="description" value="TreatmentId"></td>
-                            <td><input type="text" id="" name="description" value="DrugId"></td>
+                            <td><select id="patientSelect">
+                            </select></td>
+                            <td><select id="treatmentSelect">
+                            </select></td>
+                            <td><select id="drugSelect">
+                            </select></td>
                             <td><button type="button" onclick="addInvoiceToSystem()">Add to System</button></td>
                         </tr>
                     </tbody>
