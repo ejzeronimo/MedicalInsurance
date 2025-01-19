@@ -1,4 +1,4 @@
-# Grand Slam
+# M.E.D.I.C.S Payment System
 This repo was the frontend for my CNIT 280 final project. 
 ## Archived
 This repo is part of my college coursework and will be archived as I have completed college and no changes will be made to them.
